@@ -10,4 +10,47 @@
   <img alt="Triplet Candidates and Grid Class example" src="https://github.com/adlnlp/trig_ner/blob/main/figures/candidate_sample_1_v2.jpg" height="250" /> 
 </p>
 
-⚠️Full code to be uploaded soon.
+----
+## Datasets
+Please download the original datasets from their respective repositories.
+- [CADEC](https://doi.org/10.4225/08/570FB102BDAD2) (Karimi et al.)
+- [ShARe13](https://doi.org/10.13026/rxa7-q798) (Pradhan et al.)
+- [ShARe14](https://doi.org/10.13026/0zgk-9j94) (Mowrey et al.)
+
+Run the following code to preprocess and convert the data into a token-level json format. We follow the preprocessing steps of Dai et al. [] which involves the separation of punctuations from words and sentence-level instances. We also follow Li et al. [] json formatting.
+```
+CODE HERE
+```
+
+For custom datasets, please follow the json format below and save each train/dev/test split in separate files. ``token_char_map`` is an optional entity that maps each token to it's character span indexes. This is used for converting the final predictions back to the inline format used by Dai et al. [] but is not necessary for training.
+```
+[
+  {
+    "sentence": ["This", "is", "a", "sample", "sentence", "."],
+    "ner": [
+      {"index": [3, 4], "type": "sample_type"},
+      ...
+    ],
+    "token_char_map": [[0,4], [5,7], [8,9], [10,16], [18,26], [26,27]]
+  },
+  ...
+]
+```
+
+## Config
+The dataset and other parameters will be taken from a config file in the _config_ folder. A sample is provided as a starting point for other datasets. We provide the best found configuration for the three datasets.
+
+## Training
+```
+```
+
+### Parameters
+The following are parameters that may be used for tuning the models.
+```
+```
+
+### Outputs
+Running the training code will produce three files in the _output_ folder.
+1. _*\_testpreds.json_ - all predictions from the test set
+2. _*\_results.json_ - json file containing the configuration used for training and the metric scores (F1, P, R) for all entities and for each entities.
+3. _*.pt_ - saved state of the best model
