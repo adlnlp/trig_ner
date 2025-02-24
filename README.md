@@ -12,14 +12,14 @@
 
 ----
 ## Datasets
-Please download the original datasets from their respective repositories.
+Please download the original datasets from their respective repositories and follow Dai et al.'s [] preprocessing to create an inline version of the datasets and put them on the _dai\_processed_ folder. 
 - [CADEC](https://doi.org/10.4225/08/570FB102BDAD2) (Karimi et al.)
 - [ShARe13](https://doi.org/10.13026/rxa7-q798) (Pradhan et al.)
 - [ShARe14](https://doi.org/10.13026/0zgk-9j94) (Mowrey et al.)
 
-Run the following code to preprocess and convert the data into a token-level json format. We follow the preprocessing steps of Dai et al. [] which involves the separation of punctuations from words and sentence-level instances. We also follow Li et al. [] json formatting.
+Run the following code to convert the data into a json format following Li et al.'s [] formatting.
 ```
-CODE HERE
+TODO
 ```
 
 For custom datasets, please follow the json format below and save each train/dev/test split in separate files. ``token_char_map`` is an optional entity that maps each token to it's character span indexes. This is used for converting the final predictions back to the inline format used by Dai et al. [] but is not necessary for training.
@@ -40,13 +40,34 @@ For custom datasets, please follow the json format below and save each train/dev
 ## Config
 The dataset and other parameters will be taken from a config file in the _config_ folder. A sample is provided as a starting point for other datasets. We provide the best found configuration for the three datasets.
 
-## Training
+## Finetuning Pre-trained Language Models
+We finetune popular pre-trained language models using a masked language modeling for each dataset. The following code finetunes BioBert [] using the CADEC dataset. A bash script _fintuning.sh_ is provided to finetune all supported PLMs for all the datasets. Finetuned PLMs will be stored in the _models_ folder.
 ```
+python finetune_lm.py --dataset cadec --epochs 20 --batch_size 16 --pt_name dmis/biobert-base-cased-v1.2
+```
+
+⚠️We are in the process of making the finetuned models we used available in a shared drive.
+
+## Training
+The following code will run the base setup for the CADEC dataset.
+```
+python main.py --config ./config/cadec.json
 ```
 
 ### Parameters
-The following are parameters that may be used for tuning the models.
+The following are parameters that may be used for tuning the models for each dataset.
 ```
+--session_name --> all saved files will start with this; defaults to Run_[date]
+--use_triplet --> indicates the use of the TriG-NER triplet framework; if set to false, the code will run without using the triplet loss
+--window_size --> size of the window centering on the anchor point
+--mining_scheme --> ["grid_centroid", "grid_negcentroid", "grid_hardneg", "grid_semihard"]
+--unique_grid_pairs --> indicates the use of the top-half of the grid; if false, uses the whole grid
+--use_finetuned --> will use finetuned PLMs instead of base models
+--bert_name --> PLM used to initialize encoder weights ["Lianglab/PharmBERT-uncased", "emilyalsentzer/Bio_ClinicalBERT", "dmis-lab/biobert-base-cased-v1.2", "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract"]
+--learning_rate
+--batch_size
+--epochs
+--early_stop
 ```
 
 ### Outputs
