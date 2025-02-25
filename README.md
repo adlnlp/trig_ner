@@ -12,17 +12,20 @@
 
 ----
 ## Datasets
-Please download the original datasets from their respective repositories and follow Dai et al.'s [] preprocessing to create an inline version of the datasets and put them on the _dai\_processed_ folder. 
+Please download the original datasets from their respective repositories and follow [Dai et al.'s preprocessing](https://github.com/dainlp/acl2020-transition-discontinuous-ner/tree/masterv) to create an inline version of the datasets and put them on the _inline\_data_ folder. 
 - [CADEC](https://doi.org/10.4225/08/570FB102BDAD2) (Karimi et al.)
 - [ShARe13](https://doi.org/10.13026/rxa7-q798) (Pradhan et al.)
 - [ShARe14](https://doi.org/10.13026/0zgk-9j94) (Mowrey et al.)
 
-Run the following code to convert the data into a json format following Li et al.'s [] formatting.
+Run the following code to convert inline format to json format.
 ```
-TODO
+python preprocess.py --dataset cadec             #dataset name
+                     --input_folder inline_data  #folder containing inline data
+                     --output_Folder data        #folder to write data on
+                     --generate_token_map        #optional; generates character mapping of each token
 ```
 
-For custom datasets, please follow the json format below and save each train/dev/test split in separate files. ``token_char_map`` is an optional entity that maps each token to it's character span indexes. This is used for converting the final predictions back to the inline format used by Dai et al. [] but is not necessary for training.
+For custom datasets, please follow the json format below and save each train/dev/test split in separate files. ``token_char_map`` is an optional entity that maps each token to it's character span indexes. This is used for converting the final predictions back to the inline format but is not necessary for training.
 ```
 [
   {
@@ -57,21 +60,73 @@ python main.py --config ./config/cadec.json
 ### Parameters
 The following are parameters that may be used for tuning the models for each dataset.
 ```
---session_name --> all saved files will start with this; defaults to Run_[date]
---use_triplet --> indicates the use of the TriG-NER triplet framework; if set to false, the code will run without using the triplet loss
---window_size --> size of the window centering on the anchor point
---mining_scheme --> ["grid_centroid", "grid_negcentroid", "grid_hardneg", "grid_semihard"]
---unique_grid_pairs --> indicates the use of the top-half of the grid; if false, uses the whole grid
---use_finetuned --> will use finetuned PLMs instead of base models
---bert_name --> PLM used to initialize encoder weights ["Lianglab/PharmBERT-uncased", "emilyalsentzer/Bio_ClinicalBERT", "dmis-lab/biobert-base-cased-v1.2", "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract"]
---learning_rate
---batch_size
---epochs
---early_stop
+--session_name        --> all saved files will start with this; defaults to Run_[date]
+--use_triplet         --> indicates the use of the TriG-NER triplet framework; if set to false, the code will run without using the triplet loss
+--window_size         --> size of the window centering on the anchor point
+--mining_scheme       --> mining scheme to use (see below for options
+--unique_grid_pairs   --> indicates the use of the top-half of the grid; if false, uses the whole grid
+--use_finetuned       --> will use finetuned PLMs instead of base models
+--bert_name           --> PLM used to initialize encoder weights (see below for options)
+--learning_rate       --> learning rate
+--batch_size          --> batch size
+--epochs              --> number of epochs for training
+--early_stop          --> early stop
 ```
+
+#### Mining Schemes
+![Mining Schemes](https://github.com/adlnlp/trig_ner/blob/main/figures/triplet_selection.jpg)
+
+Use the code for ``--mining_scheme`` parameter.
+
+| Mining Scheme | Code |
+|---|---|
+| Centroid | ``grid_centroid`` | 
+| Negative Centroid | ``grid_negcentroid`` | 
+| Hard Negative | ``grid_hardneg`` |
+| Semihard Negative | ``grid_semihard``|
+
+#### Pretrained Language Models
+Tested language models used to initialize encoder weights are below. Use the model name for ``--bert_name``. Any BERT-based model in huggingface may be used.
+
+| Name | Model Name |
+|---|---|
+| [BioBERT](https://huggingface.co/dmis-lab/biobert-base-cased-v1.2) | ``dmis-lab/biobert-base-cased-v1.2`` | 
+| [BioClinicalBERT](https://huggingface.co/emilyalsentzer/Bio_ClinicalBERT) | ``emilyalsentzer/Bio_ClinicalBERT`` |
+| [PharmBERT](https://huggingface.co/Lianglab/PharmBERT-uncased) | ``Lianglab/PharmBERT-uncased`` |
+| [PubMedBERT](https://huggingface.co/microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract) | ``microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract`` |
 
 ### Outputs
 Running the training code will produce three files in the _output_ folder.
-1. _*\_testpreds.json_ - all predictions from the test set
+1. _*\_test\_preds.json_ - all predictions from the test set
 2. _*\_results.json_ - json file containing the configuration used for training and the metric scores (F1, P, R) for all entities and for each entities.
 3. _*.pt_ - saved state of the best model
+
+## Inference
+If generating precitions using an already trained model, run the following code for inference.
+```
+python inference.py --config ./config/cadec.json           #Config to load model settings
+                    --checkpoint ./output/saved_model.pt   #Load state dict from saved model from training
+                    --session_name "Session_Name"          #Set to name this run
+                    --predict_train                        #Save predictions and results for training set
+                    --predict_dev                          #Save predictions and results for dev set
+                    --predict_test                         #Save predictions and results for test set
+```
+To reproduce the results on the paper, download the saved models from [this shared drive]() and place them on the _output_ folder. Run the bash file ``reproduce_paper_results.sh`` to produce predictions and metric scores.
+
+## Overall Results
+
+![Overall results](https://github.com/adlnlp/trig_ner/blob/main/figures/overall_results.jpg)
+
+## Citation (preprint)
+WWW'25 citation will be shared after the conference.
+```
+@misc{2025-cabral-trig,
+      title={TriG-NER: Triplet-Grid Framework for Discontinuous Named Entity Recognition}, 
+      author={Rina Carines Cabral and Soyeon Caren Han and Areej Alhassan and Riza Batista-Navarro and Goran Nenadic and Josiah Poon},
+      year={2025},
+      eprint={2411.01839},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2411.01839}, 
+}
+```
