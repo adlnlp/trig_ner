@@ -1,6 +1,6 @@
 # <div align="center">TriG-NER: Triplet-Grid Framework for</br>Discontinuous Entity Recognition</div>
 
-### <div align="center">Rina Carines Cabral, Soyeon Caren Han, Josiah Poon</div>
+### <div align="center">[Rina Carines Cabral](https://scholar.google.com/citations?user=Cfdv_5IAAAAJ), [Soyeon Caren Han](https://scholar.google.com/citations?user=VH2jVOgAAAAJ), [Josiah Poon](https://scholar.google.com/citations?user=Q7U0O0gAAAAJ)</div>
 #### <div align="center">Accepted at The Web Conference 2025 (WWW'25)<br>[preprint](https://arxiv.org/abs/2411.01839)</div>
 
 **Abstract:** Discontinuous Named Entity Recognition (DNER) presents a challenging problem where entities may be scattered across multiple non-adjacent tokens, making traditional sequence labelling approaches inadequate. Existing methods predominantly rely on custom tagging schemes to handle these discontinuous entities, resulting in models tightly coupled to specific tagging strategies and lacking generalisability across diverse datasets. To address these challenges, we propose TriG-NER, a novel Triplet-Grid Framework that introduces a generalisable approach to learning robust token-level representations for discontinuous entity extraction. Our framework applies triplet loss at the token level, where similarity is defined by word pairs existing within the same entity, effectively pulling together similar and pushing apart dissimilar ones. This approach enhances entity boundary detection and reduces the dependency on specific tagging schemes by focusing on word-pair relationships within a flexible grid structure. We evaluate TriG-NER on three benchmark DNER datasets and demonstrate significant improvements over existing grid-based architectures. These results underscore our framework’s effectiveness in capturing complex entity structures and its adaptability to various tagging schemes, setting a new benchmark for discontinuous entity extraction.
@@ -49,7 +49,7 @@ We finetune popular pre-trained language models using a masked language modeling
 python finetune_lm.py --dataset cadec --epochs 20 --batch_size 16 --pt_name dmis/biobert-base-cased-v1.2
 ```
 
-Alternatively, [download](https://unisyd-my.sharepoint.com/:u:/g/personal/rina_cabral_sydney_edu_au/EburYqBUqUFAsSA14bwGKHgBnc7GF3AoOa0pSZixeSWGlg?e=MtK2xP) our finetuned models and add put them int the _models_ folder.
+Alternatively, [download](https://unisyd-my.sharepoint.com/:u:/g/personal/rina_cabral_sydney_edu_au/EburYqBUqUFAsSA14bwGKHgBnc7GF3AoOa0pSZixeSWGlg?e=MtK2xP) (4.51GB) our finetuned models and add put them int the _models_ folder.
 
 ## Training
 The following code will run the base setup for the CADEC dataset.
@@ -111,11 +111,11 @@ python inference.py --config ./config/cadec.json           #Config to load model
                     --predict_dev                          #Save predictions and results for dev set
                     --predict_test                         #Save predictions and results for test set
 ```
-To reproduce the results on the paper, [download](https://unisyd-my.sharepoint.com/:u:/g/personal/rina_cabral_sydney_edu_au/ERKfWGry67FGqj7zycaV7GgBZxc2fzpaHYOO_IHH6GOxNg?e=Bm7bd6) our best setup models and place them on the _output_ folder. Run the bash file ``reproduce_paper_results.sh`` to produce predictions and metric scores.
+To reproduce the results on the paper, [download](https://unisyd-my.sharepoint.com/:u:/g/personal/rina_cabral_sydney_edu_au/ERKfWGry67FGqj7zycaV7GgBZxc2fzpaHYOO_IHH6GOxNg?e=Bm7bd6) (5.10GB) our best setup models and place them on the _output_ folder. Run the bash file ``reproduce_paper_results.sh`` to produce predictions and metric scores.
 
 ## Overall Results
 
-![Overall results](https://github.com/adlnlp/trig_ner/blob/main/figures/overall_results.jpg)
+<img src="https://github.com/adlnlp/trig_ner/blob/main/figures/overall_results.jpg" width="50%">
 
 ## Citation (preprint)
 WWW'25 citation will be shared after the conference.
