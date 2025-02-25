@@ -44,7 +44,7 @@ For custom datasets, please follow the json format below and save each train/dev
 The dataset and other parameters will be taken from a config file in the _config_ folder. A sample is provided as a starting point for other datasets. We provide the best found configuration for the three datasets.
 
 ## Finetuning Pre-trained Language Models
-We finetune popular pre-trained language models using a masked language modeling for each dataset. The following code finetunes BioBert [] using the CADEC dataset. A bash script _fintuning.sh_ is provided to finetune all supported PLMs for all the datasets. Finetuned PLMs will be stored in the _models_ folder.
+We finetune popular pre-trained language models using a masked language modeling for each dataset. The following code finetunes BioBert using the CADEC dataset. A bash script _finetuning.sh_ is provided to finetune all supported PLMs for all the datasets. Finetuned PLMs will be stored in the _models_ folder.
 ```
 python finetune_lm.py --dataset cadec --epochs 20 --batch_size 16 --pt_name dmis/biobert-base-cased-v1.2
 ```
