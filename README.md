@@ -49,7 +49,7 @@ We finetune popular pre-trained language models using a masked language modeling
 python finetune_lm.py --dataset cadec --epochs 20 --batch_size 16 --pt_name dmis/biobert-base-cased-v1.2
 ```
 
-⚠️We are in the process of making the finetuned models we used available in a shared drive.
+Alternatively, [download](https://unisyd-my.sharepoint.com/:u:/g/personal/rina_cabral_sydney_edu_au/EburYqBUqUFAsSA14bwGKHgBnc7GF3AoOa0pSZixeSWGlg?e=MtK2xP) our finetuned models and add put them int the _models_ folder.
 
 ## Training
 The following code will run the base setup for the CADEC dataset.
@@ -111,7 +111,7 @@ python inference.py --config ./config/cadec.json           #Config to load model
                     --predict_dev                          #Save predictions and results for dev set
                     --predict_test                         #Save predictions and results for test set
 ```
-To reproduce the results on the paper, download the saved models from [this shared drive]() and place them on the _output_ folder. Run the bash file ``reproduce_paper_results.sh`` to produce predictions and metric scores.
+To reproduce the results on the paper, [download](https://unisyd-my.sharepoint.com/:u:/g/personal/rina_cabral_sydney_edu_au/ERKfWGry67FGqj7zycaV7GgBZxc2fzpaHYOO_IHH6GOxNg?e=Bm7bd6) our best setup models and place them on the _output_ folder. Run the bash file ``reproduce_paper_results.sh`` to produce predictions and metric scores.
 
 ## Overall Results
 
